@@ -33,6 +33,10 @@ app.use(session({
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
   },
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI, // Your MongoDB connection string
+    ttl: 14 * 24 * 60 * 60, // Session lifetime: 14 days
+  }),
 }));
 
 // Initialize flash messages
