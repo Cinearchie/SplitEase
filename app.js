@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const flash = require('connect-flash'); // Import connect-flash
 const http = require('http');
 const socketio = require('socket.io');
+const MongoStore = require('connect-mongo');
+
 const routes = require('./routes');
 const expenseRoutes = require('./routes/expenseRoutes'); // Import expense routes
 const roomRoutes = require('./routes/roomRoutes')
