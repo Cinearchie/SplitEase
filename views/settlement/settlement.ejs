@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settlements</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('https://source.unsplash.com/1600x900/?finance,money') no-repeat center center/cover;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+        padding: 1.5rem;
+    }
+    .settlement-table {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    }
+    th {
+        background: rgba(255, 255, 255, 0.2);
+        font-weight: bold;
+    }
+    tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .no-settlements {
+        padding: 1rem;
+        text-align: center;
+        color: #ddd;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .back-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-black/60 text-white">
+
+  <div class="container bg-white/10 backdrop-blur-lg shadow-2xl p-8 rounded-xl w-full max-w-lg border border-white/20">
+
+    <h1 class="text-3xl font-bold text-center mb-5 tracking-wide">
+      Settlements for <span class="text-blue-400"><%= room.name %></span> 💰
+    </h1>
+
+    <table class="settlement-table w-full table-auto text-lg text-white">
+      <thead>
+        <tr class="border-b border-white/30 text-center">
+          <th class="p-3">From</th>
+          <th class="p-3">To</th>
+          <th class="p-3">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (settlements.length === 0) { %>
+          <tr>
+            <td colspan="3" class="no-settlements">No settlements yet! 🚀</td>
+          </tr>
+        <% } else { %>
+          <% settlements.forEach(settlement => { %>
+            <tr class="border-b border-white/20 text-center">
+              <td class="p-3"><%= settlement.from %></td>
+              <td class="p-3"><%= settlement.to %></td>
+              <td class="p-3 font-semibold text-green-400">₹<%= settlement.amount %></td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+
+    <div class="mt-6 text-center">
+      <a href="/room/<%= room.roomId %>" class="back-button">
+        ⬅ Back to Room
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>

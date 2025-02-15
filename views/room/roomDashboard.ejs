@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= room.name %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Background */
+    body {
+      background-color: #D1F8EF;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container */
+    .container {
+      background: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      border-top: 6px solid #3674B5;
+    }
+
+    /* Header */
+    h1 {
+      color: #3674B5;
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Room ID */
+    .room-id {
+      color: #578FCA;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    /* Section Headers */
+    h2 {
+      margin-top: 1.5rem;
+      color: #3674B5;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border-bottom: 2px solid #A1E3F9;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+
+    /* Members Box */
+    .members-box {
+      background: #A1E3F9;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+
+    .members-box ul {
+      text-align: left;
+      padding-left: 1rem;
+    }
+
+    .members-box li {
+      color: #1E3A5F;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+
+    /* Buttons */
+    .action-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
+    }
+
+    .action-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .add-expense { background: #3674B5; color: white; }
+    .view-expenses { background: #578FCA; color: white; }
+    .view-settlements { background: #A1E3F9; color: #1E3A5F; }
+    .leave-room { background: #D1F8EF; color: #0F766E; border: 1px solid #0F766E; }
+
+    .add-expense:hover { background: #2B5A8C; }
+    .view-expenses:hover { background: #4C7FB1; }
+    .view-settlements:hover { background: #8DD2E8; }
+    .leave-room:hover { background: white; color: #0F766E; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1><%= room.name %></h1>
+    <p class="room-id">Room ID: <%= room.roomId %></p>
+
+    <h2>Members</h2>
+    <div class="members-box">
+      <ul>
+        <% room.members.forEach(member => { %>
+          <li>👤 <%= member.name %></li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <h2>Actions</h2>
+    <div class="mt-4">
+      <a href="/add-expense/<%= room.roomId %>" class="action-button add-expense">➕ Add Expense</a>
+      <a href="/view-expenses/<%= room.roomId %>" class="action-button view-expenses">📊 View Expenses</a>
+      <a href="/settlements/<%= room.roomId %>" class="action-button view-settlements">💰 View Settlements</a>
+      <a href="/dashboard" class="action-button leave-room">🚪 Leave Room</a>
+    </div>
+  </div>
+
+  <!-- Include Socket.IO script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const roomId = '<%= room.roomId %>';
+
+    // Join the room when the page loads
+    socket.emit('join_room', roomId);
+
+    // Listen for new expenses
+    socket.on('new_expense', (expense) => {
+      alert(`🆕 New expense added: ${expense.description} by ${expense.payer.name}`);
+    });
+  </script>
+
+</body>
+</html>

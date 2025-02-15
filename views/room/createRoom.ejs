@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Room</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Background Image */
+    body {
+      background: url('https://source.unsplash.com/1600x900/?teamwork,collaboration') no-repeat center center/cover;
+      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Dark overlay for better readability */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    /* Glassmorphism effect */
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Input fields */
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #60a5fa;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-input::placeholder {
+      color: #cbd5e1;
+    }
+
+    /* Create button */
+    .create-button {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    .create-button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    }
+
+    /* Alert messages */
+    .alert {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .alert-success {
+      background: #22c55e;
+    }
+
+    .alert-error {
+      background: #ef4444;
+    }
+
+    /* Back link */
+    .back-link {
+      color: #93c5fd;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="text-2xl font-bold text-white mb-4">Create a Room</h1>
+
+    <% if (success_msg) { %>
+      <div class="alert alert-success">
+        ✅ <span class="ml-2"><%= success_msg %></span>
+      </div>
+    <% } %>
+
+    <% if (error_msg) { %>
+      <div class="alert alert-error">
+        ❌ <span class="ml-2"><%= error_msg %></span>
+      </div>
+    <% } %>
+
+    <form action="/create-room" method="POST" class="space-y-3">
+      <div>
+        <input type="text" name="name" id="name" class="form-input" placeholder="Enter Room Name" required>
+      </div>
+      <div>
+        <input type="text" name="roomId" id="roomId" class="form-input" placeholder="Enter Room ID" required>
+      </div>
+      <div>
+        <input type="password" name="password" id="password" class="form-input" placeholder="Enter Password" required>
+      </div>
+      <button type="submit" class="create-button w-full">
+        Create Room
+      </button>
+    </form>
+
+    <div class="mt-4">
+      <a href="/dashboard" class="back-link">
+        ⬅ Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

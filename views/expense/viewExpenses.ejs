@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Expenses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Background */
+    body {
+      background: url('https://source.unsplash.com/1600x900/?finance,money') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Dark overlay */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    /* Glassmorphism Container */
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Header */
+    h1 {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      color: white;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: bold;
+    }
+
+    tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transition: 0.3s ease-in-out;
+    }
+
+    /* Buttons */
+    .btn {
+      display: block;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      width: 100%;
+      border-radius: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: 0.3s ease-in-out;
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+    }
+
+    .btn-green:hover {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      transform: scale(1.05);
+    }
+
+    .btn-back {
+      color: #86efac;
+    }
+
+    .btn-back:hover {
+      color: #4ade80;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Expenses for <%= room.name %></h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount (₹)</th>
+          <th>Paid By</th>
+        </tr>
+      </thead>
+      <tbody id="expense-list">
+        <% expenses.forEach(expense => { %>
+          <tr>
+            <td><%= expense.description %></td>
+            <td>₹<%= expense.amount %></td>
+            <td><%= expense.payer.name %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <!-- View Settlements Button -->
+    <a href="/settlements/<%= room.roomId %>" class="btn btn-green">💰 View Settlements</a>
+
+    <!-- Back to Room Button -->
+    <a href="/room/<%= room.roomId %>" class="btn btn-back">⬅ Back to Room</a>
+  </div>
+
+  <!-- Include Socket.IO script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const roomId = '<%= room.roomId %>';
+
+    // Join the room when the page loads
+    socket.emit('join_room', roomId);
+
+    // Listen for new expenses
+    socket.on('new_expense', (expense) => {
+      const expenseList = document.getElementById('expense-list');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${expense.description}</td>
+        <td>₹${expense.amount}</td>
+        <td>${expense.payer.name}</td>
+      `;
+      expenseList.appendChild(newRow);
+    });
+  </script>
+
+</body>
+</html>

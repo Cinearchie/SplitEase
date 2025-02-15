@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SplitEase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('https://source.unsplash.com/1600x900/?technology,futuristic') no-repeat center center/cover;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+      padding: 1.5rem;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #4f46e5, #3b82f6);
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .nav-link:hover {
+      background: linear-gradient(135deg, #3b82f6, #4f46e5);
+      transform: scale(1.05);
+    }
+    .logout-btn {
+      background: linear-gradient(135deg, #e63946, #ff6b6b);
+      width: 100%;
+    }
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #ff6b6b, #e63946);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-black/60 text-white">
+
+  <div class="container bg-white/10 backdrop-blur-xl shadow-2xl p-8 rounded-xl w-full max-w-md border border-white/20 flex flex-col items-center">
+
+    <h1 class="text-3xl font-bold text-center text-white mb-5 tracking-wide">
+      Welcome, <span class="text-blue-400"><%= user.name %></span>! 🚀
+    </h1>
+
+    <p class="text-lg text-gray-200 mb-6 text-center">
+      Manage your rooms & expenses with ease.
+    </p>
+
+    <nav class="space-y-4 w-full">
+      <a href="/create-room" class="nav-link">
+        ➕ <span>Create Room</span>
+      </a>
+      <a href="/join-room" class="nav-link">
+        🔑 <span>Join Room</span>
+      </a>
+    </nav>
+
+    <!-- Centered Logout Button at the Bottom -->
+    <form action="/logout" method="POST" class="w-full mt-6">
+      <button type="submit" class="nav-link logout-btn">
+        🚪 <span>Logout</span>
+      </button>
+    </form>  
+
+  </div>
+</body>
+</html>
