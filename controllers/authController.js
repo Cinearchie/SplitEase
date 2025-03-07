@@ -6,13 +6,14 @@ exports.register = async (req, res) => {
   try {
     const user = new User({ name, email, password });
     await user.save();
+    console.log(user)
     req.flash('success_msg', 'Registration successful! You are now logged in.'); // Flash message
     req.login(user, (err) => { // Auto-login after registration
       if (err) return next(err);
       return res.redirect('/dashboard');
     });
   } catch (err) {
-    console.error(err);
+    console.log(err);
     req.flash('error_msg', 'Registration failed. Please try again.'); // Flash message
     res.redirect('/register');
   }
