@@ -73,18 +73,21 @@
           credentials: 'include' // Ensures session cookies are sent
         });
 
-        // if (response.redirected) {
-        //   window.location.href = response.url; // Redirect to login or dashboard
-        // } else {
-        //   const result = await response.json();
-        //   alert(result.error || 'Registration failed');
-        // }
-        if(response){
-          console.log(response);
-        }else{
+        if (response.redirected) {
+          console.log(response)
+          // window.location.href = response.url; // Redirect to login or dashboard
+
+        } else {
           const result = await response.json();
           console.log(result)
+          alert(result.error || 'Registration failed');
         }
+        // if(response){
+        //   console.log(response);
+        // }else{
+        //   const result = await response.json();
+        //   console.log(result)
+        // }
       } catch (error) {
         console.error('Registration Error:', error);
         alert('An error occurred. Please try again.');
