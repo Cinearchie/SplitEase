@@ -9,13 +9,20 @@ const socketio = require('socket.io');
 const MongoStore = require('connect-mongo');
 
 const routes = require('./routes');
+const cors = require('cors');
 const expenseRoutes = require('./routes/expenseRoutes'); // Import expense routes
 const roomRoutes = require('./routes/roomRoutes')
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app); // Create an HTTP server
-const io = socketio(server); // Attach Socket.IO to the server
+const io = socketio(server, {
+  transports: ['websocket', 'polling'], // Prioritize WebSocket first
+  cors: {
+    origin: process.env.CLIENT_URL || '*', // Set your frontend URL in production
+    credentials: true,
+  },
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -25,6 +32,10 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+
+
 // Session configuration (required for flash messages)
 app.use(session({
   secret: process.env.SESSION_SECRET,
