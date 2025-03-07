@@ -1,23 +1,33 @@
 const passport = require('passport'); // Import passport
 const User = require('../models/User');
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   const { name, email, password } = req.body;
   try {
     const user = new User({ name, email, password });
     await user.save();
-    console.log(user)
-    req.flash('success_msg', 'Registration successful! You are now logged in.'); // Flash message
-    req.login(user, (err) => { // Auto-login after registration
+    console.log(user);
+    req.flash('success_msg', 'Registration successful! You are now logged in.');
+    
+    req.login(user, (err) => {
       if (err) return next(err);
+      if (req.headers['content-type'] === 'application/json') {
+        return res.json({ success: true, redirect: '/dashboard' });
+      }
       return res.redirect('/dashboard');
     });
+
   } catch (err) {
     console.log(err);
-    req.flash('error_msg', 'Registration failed. Please try again.'); // Flash message
+    req.flash('error_msg', 'Registration failed. Please try again.');
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(400).json({ success: false, error: 'Registration failed' });
+    }
     res.redirect('/register');
   }
 };
+
+
 
 exports.login = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
@@ -35,14 +45,12 @@ exports.login = (req, res, next) => {
   })(req, res, next);
 };
 
-exports.logout = (req, res) => {
-  req.logout((err) => {
+exports.logout = (req, res, next) => {
+  req.logout(); // No callback needed in Express 5
+  req.session.destroy((err) => {
     if (err) return next(err);
-    req.session.destroy((err) => { // Destroy the session
-      if (err) return next(err);
-      res.clearCookie('connect.sid'); // Clear the session cookie
-      console.log('Session getting cancelled!!')
-      res.redirect('/');
-    });
+    res.clearCookie('connect.sid'); 
+    console.log('Session getting cancelled!!');
+    res.redirect('/');
   });
 };
