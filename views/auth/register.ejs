@@ -73,11 +73,17 @@
           credentials: 'include' // Ensures session cookies are sent
         });
 
-        if (response.redirected) {
-          window.location.href = response.url; // Redirect to login or dashboard
-        } else {
+        // if (response.redirected) {
+        //   window.location.href = response.url; // Redirect to login or dashboard
+        // } else {
+        //   const result = await response.json();
+        //   alert(result.error || 'Registration failed');
+        // }
+        if(response){
+          console.log(response);
+        }else{
           const result = await response.json();
-          alert(result.error || 'Registration failed');
+          console.log(result)
         }
       } catch (error) {
         console.error('Registration Error:', error);
