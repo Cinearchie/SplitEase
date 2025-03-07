@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+app.use(cors());
 
 
 // Session configuration (required for flash messages)
